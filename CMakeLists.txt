@@ -72,6 +72,8 @@ find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick QuickControls2 REQUIRED)
 set(Qt "Qt${QT_VERSION_MAJOR}")
 find_package(${Qt} COMPONENTS Core Quick QuickControls2 REQUIRED)
 
+add_subdirectory("3rdparty/STX" EXCLUDE_FROM_ALL)
+
 
 ## Application
 
@@ -107,7 +109,9 @@ target_compile_definitions(qspcplay
   PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_compile_options(qspcplay PRIVATE "${options}")
 target_link_libraries(qspcplay
-  PRIVATE ${Qt}::Core ${Qt}::Quick ${Qt}::QuickControls2)
+  PRIVATE ${Qt}::Core ${Qt}::Quick ${Qt}::QuickControls2
+  PRIVATE stx
+)
 
 set_target_properties(qspcplay PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
