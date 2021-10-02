@@ -1,7 +1,42 @@
+#include "util/mv.h"
+
+#include <stx/result.h>
+
+// GUI
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 #include <QQmlContext>
+
+// Qt utility
+#include <QDebug>
+#include <QDir>
+#include <QStandardPaths>
+
+using stx::Result, stx::Ok, stx::Err;
+
+static Result<QDir, QString> create_config_dir() {
+    // AppConfigLocation is the "correct" place to put app data.
+    // But on Windows, it returns AppData/Local (intended more for caches than config)
+    // rather than Roaming, so use AppDataLocation instead.
+    constexpr QStandardPaths::StandardLocation CONFIG_LOCATION =
+#ifdef _WIN32
+        QStandardPaths::AppDataLocation;
+#else
+        QStandardPaths::AppConfigLocation;
+#endif
+    auto config_path = QStandardPaths::writableLocation(CONFIG_LOCATION);
+    if (config_path.isEmpty()) {
+        return Err(QObject::tr("failed to locate config file dir"));
+    }
+
+    auto config_dir = QDir(mv(config_path));
+    if (!config_dir.mkpath(".")) {
+        return Err(QObject::tr("failed to create config file dir"));
+    }
+
+    return Ok(mv(config_dir));
+}
 
 int main(int argc, char *argv[])
 {
@@ -24,6 +59,16 @@ int main(int argc, char *argv[])
         QQuickStyle::setStyle("fusion");
     }
 #endif
+
+    {
+        auto config_dir = create_config_dir();
+        if (config_dir.is_ok()) {
+            qDebug() << "config dir:" << config_dir.value();
+        }
+        if (config_dir.is_err()) {
+            qDebug() << "error:" << config_dir.err_value();
+        }
+    }
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("qtversion", QString(qVersion()));
