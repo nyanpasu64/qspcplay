@@ -11,8 +11,9 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick REQUIRED)
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick QuickControls2 REQUIRED)
+set(Qt "Qt${QT_VERSION_MAJOR}")
+find_package(${Qt} COMPONENTS Core Quick QuickControls2 REQUIRED)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -45,7 +46,7 @@ endif()
 target_compile_definitions(qspcplay
   PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(qspcplay
-  PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick)
+  PRIVATE ${Qt}::Core ${Qt}::Quick ${Qt}::QuickControls2)
 
 set_target_properties(qspcplay PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
