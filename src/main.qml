@@ -6,7 +6,7 @@ ApplicationWindow {
     width: 640
     height: 480
     visible: true
-    title: qsTr("Hello World")
+    title: "%1 %2".arg(qsTr("Hello World from Qt")).arg(qtversion)
 
     menuBar: MenuBar {
         Menu {
