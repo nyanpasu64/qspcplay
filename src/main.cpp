@@ -1,6 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-
+#include <QQuickStyle>
 
 int main(int argc, char *argv[])
 {
@@ -12,6 +12,12 @@ int main(int argc, char *argv[])
         Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor
     );
     QGuiApplication app(argc, argv);
+
+    // If QT_QUICK_CONTROLS_STYLE is set, use the style override.
+    // Otherwise, default to Fusion.
+    if (qEnvironmentVariableIsEmpty("QT_QUICK_CONTROLS_STYLE")) {
+        QQuickStyle::setStyle("fusion");
+    }
 
     QQmlApplicationEngine engine;
 
