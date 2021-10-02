@@ -72,6 +72,7 @@ find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick QuickControls2 REQUIRED)
 set(Qt "Qt${QT_VERSION_MAJOR}")
 find_package(${Qt} COMPONENTS Core Quick QuickControls2 REQUIRED)
 
+add_subdirectory("3rdparty/fmt" EXCLUDE_FROM_ALL)
 add_subdirectory("3rdparty/STX" EXCLUDE_FROM_ALL)
 
 
@@ -110,7 +111,7 @@ target_compile_definitions(qspcplay
 target_compile_options(qspcplay PRIVATE "${options}")
 target_link_libraries(qspcplay
   PRIVATE ${Qt}::Core ${Qt}::Quick ${Qt}::QuickControls2
-  PRIVATE stx
+  PRIVATE fmt::fmt stx
 )
 
 set_target_properties(qspcplay PROPERTIES
