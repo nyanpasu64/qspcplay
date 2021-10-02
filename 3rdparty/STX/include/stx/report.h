@@ -339,7 +339,7 @@ template <typename T>
   if (fmt_buffer_size < 0 || fmt_buffer_size >= STX_ARG_SIZE + 1) {            \
     return FixedReport(kFormatError, kFormatErrorSize);                        \
   } else {                                                                     \
-    return FixedReport(fmt_buffer, fmt_buffer_size);                           \
+    return FixedReport(fmt_buffer, static_cast<size_t>(fmt_buffer_size));      \
   }
 
 template <typename T>
