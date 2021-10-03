@@ -36,6 +36,21 @@ ApplicationWindow {
 
     AppState {
         id: state
+        onError: (message) => {
+            error_dialog.contentItem.text = message;
+            error_dialog.visible = true;
+        }
+    }
+
+    Component.onCompleted: state.on_loaded()
+
+    Dialog {
+        id: error_dialog
+        anchors.centerIn: parent
+        title: "Error"
+        contentItem: Text { }
+        standardButtons: Dialog.Ok
+        modal: true
     }
 
     MouseArea {

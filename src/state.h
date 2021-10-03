@@ -10,11 +10,22 @@ class AppState : public QObject {
     QML_ELEMENT
     QML_SINGLETON
     Q_PROPERTY(QString qt_version READ qt_version CONSTANT)
+
+private:
+    QString _curr_error;
+
 public:
-    // AppState()
-    using QObject::QObject;
+    explicit AppState(QObject * parent = nullptr);
 
     QString qt_version() const;
+
+public slots:
+    /// Should be called once QML is loaded, to show any errors that occurred during
+    /// startup.
+    void on_loaded();
+
+signals:
+    void error(QString message);
 };
 
 }
