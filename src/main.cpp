@@ -12,6 +12,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QStandardPaths>
+#include <QSqlDatabase>
 
 using stx::Result, stx::Ok, stx::Err;
 
@@ -27,19 +28,38 @@ static Result<QDir, QString> create_config_dir() {
 #endif
     auto config_path = QStandardPaths::writableLocation(CONFIG_LOCATION);
     if (config_path.isEmpty()) {
-        return Err(QObject::tr("failed to locate config file dir"));
+        return Err(QObject::tr("failed to locate config dir"));
     }
 
-    auto config_dir = QDir(mv(config_path));
+    auto config_dir = QDir(config_path);
     if (!config_dir.mkpath(".")) {
-        return Err(QObject::tr("failed to create config file dir"));
+        return Err(
+            QObject::tr("failed to create config dir \"%1\"").arg(config_path)
+        );
     }
 
     return Ok(mv(config_dir));
 }
 
-int main(int argc, char *argv[])
-{
+static const QString SETTINGS_NAME = QStringLiteral("settings.sqlite3");
+
+static Result<QSqlDatabase, QString> open_settings() {
+    TRY_OK(config_dir, create_config_dir());
+
+    QString settings_path = config_dir.filePath(SETTINGS_NAME);
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName(settings_path);
+
+    if (!db.open()) {
+        return Err(
+            QObject::tr("failed to open settings file \"%1\"").arg(settings_path)
+        );
+    }
+
+    return Ok(mv(db));
+}
+
+int main(int argc, char *argv[]) {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
@@ -60,13 +80,16 @@ int main(int argc, char *argv[])
     }
 #endif
 
+    QSqlDatabase settings;
+
     {
-        auto config_dir = create_config_dir();
-        if (config_dir.is_ok()) {
-            qDebug() << "config dir:" << config_dir.value();
+        auto result = open_settings();
+        if (result.is_ok()) {
+            qDebug() << "settings file:" << result.value().databaseName();
+            settings = mv(result.value());
         }
-        if (config_dir.is_err()) {
-            qDebug() << "error:" << config_dir.err_value();
+        if (result.is_err()) {
+            qDebug() << "error:" << qUtf8Printable(result.err_value());
         }
     }
 

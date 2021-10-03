@@ -68,9 +68,9 @@ endif()
 include_directories(src)
 #include_directories(SYSTEM 3rdparty)
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick QuickControls2 REQUIRED)
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick QuickControls2 Sql REQUIRED)
 set(Qt "Qt${QT_VERSION_MAJOR}")
-find_package(${Qt} COMPONENTS Core Quick QuickControls2 REQUIRED)
+find_package(${Qt} COMPONENTS Core Quick QuickControls2 Sql REQUIRED)
 
 add_subdirectory("3rdparty/fmt" EXCLUDE_FROM_ALL)
 add_subdirectory("3rdparty/STX" EXCLUDE_FROM_ALL)
@@ -110,7 +110,7 @@ target_compile_definitions(qspcplay
   PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_compile_options(qspcplay PRIVATE "${options}")
 target_link_libraries(qspcplay
-  PRIVATE ${Qt}::Core ${Qt}::Quick ${Qt}::QuickControls2
+  PRIVATE ${Qt}::Core ${Qt}::Quick ${Qt}::QuickControls2 ${Qt}::Sql
   PRIVATE fmt::fmt stx
 )
 
