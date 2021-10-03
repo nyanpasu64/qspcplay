@@ -17,7 +17,10 @@ ApplicationWindow {
             Action { text: qsTr("&Save") }
             Action { text: qsTr("Save &As...") }
             MenuSeparator { }
-            Action { text: qsTr("&Quit") }
+            Action {
+                text: qsTr("&Quit")
+                onTriggered: close()
+            }
         }
         Menu {
             title: qsTr("&Edit")
