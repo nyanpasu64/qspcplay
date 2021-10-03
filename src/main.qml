@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
+import Qt.labs.platform as Labs
 import QSpcPlay
 
 ApplicationWindow {
@@ -12,8 +13,10 @@ ApplicationWindow {
     menuBar: MenuBar {
         Menu {
             title: qsTr("&File")
-            Action { text: qsTr("&New...") }
-            Action { text: qsTr("&Open...") }
+            Action {
+                text: qsTr("&Open...")
+                onTriggered: file_dialog.open()
+            }
             Action { text: qsTr("&Save") }
             Action { text: qsTr("Save &As...") }
             MenuSeparator { }
@@ -43,6 +46,11 @@ ApplicationWindow {
     }
 
     Component.onCompleted: state.on_loaded()
+
+    Labs.FileDialog {
+        id: file_dialog
+        folder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.MusicLocation)
+    }
 
     Dialog {
         id: error_dialog

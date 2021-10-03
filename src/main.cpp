@@ -1,17 +1,17 @@
 #include "state.h"
 
 // GUI
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 #include <QQmlContext>
 
 
 int main(int argc, char *argv[]) {
-    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(
+    QApplication::setHighDpiScaleFactorRoundingPolicy(
         Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor
     );
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     // The default style on Qt 6 is Fusion, which looks OK.
 
