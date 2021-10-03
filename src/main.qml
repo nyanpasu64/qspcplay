@@ -1,12 +1,13 @@
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
+import QSpcPlay
 
 ApplicationWindow {
     width: 640
     height: 480
     visible: true
-    title: "%1 %2".arg(qsTr("Hello World from Qt")).arg(qtversion)
+    title: "%1 %2".arg(qsTr("Hello World from Qt")).arg(state.qt_version)
 
     menuBar: MenuBar {
         Menu {
@@ -28,6 +29,10 @@ ApplicationWindow {
             title: qsTr("&Help")
             Action { text: qsTr("&About") }
         }
+    }
+
+    AppState {
+        id: state
     }
 
     MouseArea {

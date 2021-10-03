@@ -1,3 +1,4 @@
+#include "state.h"
 #include "util/mv.h"
 
 #include <stx/result.h>
@@ -80,9 +81,9 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    QQmlApplicationEngine engine;
-    engine.rootContext()->setContextProperty("qtversion", QString(qVersion()));
+    qmlRegisterType<state::AppState>("QSpcPlay", 1, 0, "AppState");
 
+    QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     engine.load(url);
     if (engine.rootObjects().isEmpty())

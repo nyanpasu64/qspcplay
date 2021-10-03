@@ -79,6 +79,7 @@ add_subdirectory("3rdparty/STX" EXCLUDE_FROM_ALL)
 
 set(PROJECT_SOURCES
     src/main.cpp
+    src/state.cpp
     src/qml.qrc
 )
 
