@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
-import Qt.labs.platform as Labs
+import QtQuick.Dialogs
 import QSpcPlay
 
 ApplicationWindow {
@@ -47,12 +47,12 @@ ApplicationWindow {
 
     Component.onCompleted: state.on_loaded()
 
-    Labs.FileDialog {
+    FileDialog {
         id: file_dialog
-        folder: state.last_folder
+        currentFolder: state.last_folder
 
         onAccepted: {
-            state.on_file_opened(file);
+            state.on_file_opened(selectedFile);
         }
     }
 
