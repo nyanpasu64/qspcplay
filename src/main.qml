@@ -49,7 +49,11 @@ ApplicationWindow {
 
     Labs.FileDialog {
         id: file_dialog
-        folder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.MusicLocation)
+        folder: state.last_folder
+
+        onAccepted: {
+            state.on_file_opened(file);
+        }
     }
 
     Dialog {
